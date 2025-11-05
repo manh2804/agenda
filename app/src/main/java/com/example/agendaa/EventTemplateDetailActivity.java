@@ -2,6 +2,7 @@ package com.example.agendaa;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
@@ -14,7 +15,7 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
     private EditText edtTitle, edtDescription;
     private TextView btnStartDate, btnStartTime, btnEndDate, btnEndTime, btnRepeat, btnColor, tagWork;
     private CheckBox cbHigh, cbMedium, cbLow;
-    private Button btnCancel, btnSave;
+    private Button btnCancel, btnSave, btnUseTemplate;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
         cbLow = findViewById(R.id.cbLow);
         btnCancel = findViewById(R.id.btnCancel);
         btnSave = findViewById(R.id.btnSave);
+        btnUseTemplate = findViewById(R.id.btnUseTemplate);
 
         // Chọn ngày bắt đầu/kết thúc
         btnStartDate.setOnClickListener(view -> showDatePicker(btnStartDate));
@@ -42,6 +44,8 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
         // Chọn giờ bắt đầu/kết thúc
         btnStartTime.setOnClickListener(view -> showTimePicker(btnStartTime));
         btnEndTime.setOnClickListener(view -> showTimePicker(btnEndTime));
+
+        btnUseTemplate.setOnClickListener(v -> useTemplate());
 
         // Lặp lại
         btnRepeat.setOnClickListener(view -> showRepeatDialog());
@@ -114,8 +118,34 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void useTemplate() {
+        // Lấy dữ liệu từ form
+        String title = edtTitle.getText().toString().trim();
+
+        if (title.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập tiêu đề", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Chuyển sang AddEventActivity với dữ liệu mẫu
+        Intent intent = new Intent(this, AddEventActivity.class);
+        intent.putExtra("from_template", true);
+        intent.putExtra("template_title", title);
+        intent.putExtra("template_description", edtDescription.getText().toString());
+        // ... thêm các field khác
+
+        startActivity(intent);
+        finish();
+    }
+
     private void saveTemplate() {
         String title = edtTitle.getText().toString().trim();
+
+        if (title.isEmpty()) {
+            edtTitle.setError("Vui lòng nhập tiêu đề mẫu");
+            return;
+        }
+
         String desc = edtDescription.getText().toString().trim();
         String startDate = btnStartDate.getText().toString();
         String endDate = btnEndDate.getText().toString();
@@ -123,10 +153,17 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
         String endTime = btnEndTime.getText().toString();
         String repeat = btnRepeat.getText().toString();
         String color = btnColor.getText().toString();
-        String priority = cbHigh.isChecked() ? "Cao" : cbMedium.isChecked() ? "Trung bình" : cbLow.isChecked() ? "Thấp" : "";
+        String priority = cbHigh.isChecked() ? "Cao" :
+                cbMedium.isChecked() ? "Trung bình" :
+                        cbLow.isChecked() ? "Thấp" : "";
         boolean selectedTag = tagWork.getAlpha() == 1.0f;
 
-        Toast.makeText(this, "Đã lưu mẫu sự kiện!", Toast.LENGTH_SHORT).show();
+        // TODO: Lưu vào database
+        // TemplateDatabase.save(new Template(title, desc, startDate, endDate, ...));
+
+        Toast.makeText(this, "Đã lưu mẫu sự kiện: " + title, Toast.LENGTH_SHORT).show();
+
+        // Quay lại màn hình trước
         finish();
     }
 }

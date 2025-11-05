@@ -31,15 +31,28 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Thống kê và báo cáo"
+            android:text="Thống kê"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- View để cân bằng layout -->
-        <View
+        <ImageButton
+            android:id="@+id/btnExport"
             android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Export"
+            android:src="@drawable/ic_export"
+            app:tint="@color/black" />
+
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Settings"
+            android:src="@drawable/ic_setting"
+            app:tint="@color/black" />
 
     </LinearLayout>
 

@@ -6,7 +6,7 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-    <!-- App Bar với nút back -->
+    <!-- App Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -36,10 +36,25 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- View để cân bằng layout -->
-        <View
+        <!-- Nút Smart Reminder -->
+        <ImageButton
+            android:id="@+id/btnSmartReminder"
             android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Smart Reminder"
+            android:src="@drawable/ic_clock_reminder"
+            app:tint="#FFA500" />
+
+        <!-- Nút Use Template -->
+        <ImageButton
+            android:id="@+id/btnUseTemplate"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Use Template"
+            android:src="@drawable/ic_temp"
+            app:tint="#9B5DE5" />
 
     </LinearLayout>
 

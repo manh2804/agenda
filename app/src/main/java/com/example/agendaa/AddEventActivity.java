@@ -2,13 +2,22 @@ package com.example.agendaa;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class AddEventActivity extends AppCompatActivity {
@@ -23,6 +32,8 @@ public class AddEventActivity extends AppCompatActivity {
     private CheckBox cbHigh, cbMedium, cbLow;
     private TextView tagUrgent, tagWork, tagOther, tagPersonal, tagFamily;
     private TextView btnCancel, btnSave;
+
+    private ImageButton btnSmartReminder, btnUseTemplate;
 
     // Data variables
     private Calendar startCalendar, endCalendar;
@@ -46,6 +57,8 @@ public class AddEventActivity extends AppCompatActivity {
     private void initViews() {
         // App bar
         btnBack = findViewById(R.id.btnBack);
+        btnSmartReminder = findViewById(R.id.btnSmartReminder);
+        btnUseTemplate = findViewById(R.id.btnUseTemplate);
 
         // Form fields
         edtTitle = findViewById(R.id.edtTitle);
@@ -140,6 +153,18 @@ public class AddEventActivity extends AppCompatActivity {
         // Setup color list items
         setupColorListItems();
 
+        // Nhắc nhở thông minh
+        btnSmartReminder.setOnClickListener(v -> {
+            showSmartReminderSuggestion();
+        });
+
+// Sử dụng mẫu có sẵn
+        btnUseTemplate.setOnClickListener(v -> {
+            Intent intent = new Intent(AddEventActivity.this, EventTemplateDetailActivity.class);
+            intent.putExtra("mode", "select_template");
+            startActivityForResult(intent, 100);
+        });
+
         // Action buttons
         btnCancel.setOnClickListener(v -> finish());
         btnSave.setOnClickListener(v -> saveEvent());
@@ -154,6 +179,19 @@ public class AddEventActivity extends AppCompatActivity {
 
         // Hide color list initially
         colorList.setVisibility(View.GONE);
+    }
+
+    private void showSmartReminderSuggestion() {
+        String suggestion = "Gợi ý thông minh:\n\n" +
+                "Dựa trên thói quen của bạn, nên đặt nhắc nhở:\n" +
+                "• 1 ngày trước (09:00)\n" +
+                "• 1 giờ trước sự kiện\n" +
+                "• 15 phút trước sự kiện";
+
+        SmartReminderDialog dialog = new SmartReminderDialog(this, suggestion, () -> {
+            Toast.makeText(this, "Đã áp dụng nhắc nhở thông minh", Toast.LENGTH_SHORT).show();
+        });
+        dialog.show();
     }
 
     private void showDatePicker(Calendar calendar, boolean isStartDate) {
@@ -334,6 +372,66 @@ public class AddEventActivity extends AppCompatActivity {
             this.priority = priority;
             this.tags = tags;
             this.color = color;
+        }
+    }
+
+    public static class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
+
+        private List<AgendaActivity.EventItem> eventList;
+        private OnEventClickListener listener;
+
+        public interface OnEventClickListener {
+            void onEventClick(AgendaActivity.EventItem event);
+        }
+
+        public EventAdapter(List<AgendaActivity.EventItem> eventList, OnEventClickListener listener) {
+            this.eventList = eventList;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_event, parent, false);
+            return new EventViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
+            AgendaActivity.EventItem event = eventList.get(position);
+            holder.bind(event, listener);
+        }
+
+        @Override
+        public int getItemCount() {
+            return eventList.size();
+        }
+
+        static class EventViewHolder extends RecyclerView.ViewHolder {
+            TextView tvTitle, tvTime, tvDate;
+            View colorIndicator;
+
+            EventViewHolder(@NonNull View itemView) {
+                super(itemView);
+                tvTitle = itemView.findViewById(R.id.tvEventTitle);
+                tvTime = itemView.findViewById(R.id.tvEventTime);
+                tvDate = itemView.findViewById(R.id.tvEventDate);
+                colorIndicator = itemView.findViewById(R.id.colorIndicator);
+            }
+
+            void bind(AgendaActivity.EventItem event, OnEventClickListener listener) {
+                tvTitle.setText(event.title);
+                tvTime.setText(event.time);
+                tvDate.setText(event.date);
+                colorIndicator.setBackgroundColor(Color.parseColor(event.color));
+
+                itemView.setOnClickListener(v -> {
+                    if (listener != null) {
+                        listener.onEventClick(event);
+                    }
+                });
+            }
         }
     }
 }

@@ -1,17 +1,20 @@
 package com.example.agendaa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.*;
 
 public class StatisticsActivity extends AppCompatActivity {
 
     // UI Elements
-    private ImageButton btnBack;
+    private ImageButton btnBack, btnExport, btnSettings;;
     private TextView btnAllTime, btnThisMonth, btnToday;
     private TextView tvTotalTime, tvTimeComparison;
     private TextView tvWorkHours, tvPersonalHours, tvFamilyHours, tvOtherHours;
@@ -35,6 +38,8 @@ public class StatisticsActivity extends AppCompatActivity {
     private void initViews() {
         // App bar
         btnBack = findViewById(R.id.btnBack);
+        btnExport = findViewById(R.id.btnExport);
+        btnSettings = findViewById(R.id.btnSettings);
 
         // Time period selectors
         btnAllTime = findViewById(R.id.btnAllTime);
@@ -59,6 +64,14 @@ public class StatisticsActivity extends AppCompatActivity {
         // Back button
         btnBack.setOnClickListener(v -> finish());
 
+        // Xuất báo cáo
+        btnExport.setOnClickListener(v -> exportReport());
+
+// Cài đặt thống kê
+        btnSettings.setOnClickListener(v -> {
+            Toast.makeText(this, "Cài đặt thống kê", Toast.LENGTH_SHORT).show();
+        });
+
         // Time period selectors
         btnAllTime.setOnClickListener(v -> {
             selectedPeriod = 0;
@@ -80,6 +93,31 @@ public class StatisticsActivity extends AppCompatActivity {
             loadStatisticsData();
             updateUI();
         });
+    }
+
+    private void exportReport() {
+        String reportText = createReportText();
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Báo cáo thống kê lịch làm việc");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, reportText);
+
+        try {
+            startActivity(Intent.createChooser(shareIntent, "Xuất báo cáo"));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "Không thể xuất báo cáo", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String createReportText() {
+        return "BÁO CÁO THỐNG KÊ LỊCH LÀM VIỆC\n\n" +
+                "Tổng thời gian: " + String.format("%.1f giờ", currentData.totalHours) + "\n" +
+                "Công việc: " + String.format("%.0f giờ", currentData.workHours) + "\n" +
+                "Cá nhân: " + String.format("%.0f giờ", currentData.personalHours) + "\n" +
+                "Gia đình: " + String.format("%.0f giờ", currentData.familyHours) + "\n" +
+                "Khác: " + String.format("%.1f giờ", currentData.otherHours) + "\n\n" +
+                currentData.comparisonText;
     }
 
     private void updateTimePeriodButtons() {
