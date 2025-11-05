@@ -334,7 +334,6 @@ public class ShareEventActivity extends AppCompatActivity {
         editIntent.putExtra("event_data", currentEvent);
         editIntent.putExtra("mode", "edit");
         startActivity(editIntent);
-        finish(); // Đóng màn hình share sau khi chuyển sang edit
     }
 
     private void deleteEvent() {

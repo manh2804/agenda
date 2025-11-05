@@ -294,6 +294,23 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/btnUseTemplate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#9B5DE5"
+                    android:background="@drawable/bg_button_purple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="Sử dụng"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
                     android:id="@+id/btnSave"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

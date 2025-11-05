@@ -2,17 +2,19 @@ package com.example.agendaa;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton btnStatistics, btnTemplates, btnSettings;
     private FloatingActionButton fabAddEvent;
-    private LinearLayout btnAgenda, btnShare, btnReminder;
+    private LinearLayout btnAgenda, btnStatisticsCard, btnShare, btnTemplatesCard, btnReminder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
         // Floating Action Button
         fabAddEvent = findViewById(R.id.fabAddEvent);
 
-        // Main menu items
+        // Main menu cards
         btnAgenda = findViewById(R.id.btnAgenda);
+        btnStatisticsCard = findViewById(R.id.btnStatisticsCard);
         btnShare = findViewById(R.id.btnShare);
+        btnTemplatesCard = findViewById(R.id.btnTemplatesCard);
         btnReminder = findViewById(R.id.btnReminder);
     }
 
@@ -45,47 +49,66 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // 2. Thêm sự kiện - FAB
-        fabAddEvent.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddEventActivity.class);
+        // 2. Thống kê - Card
+        btnStatisticsCard.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
             startActivity(intent);
         });
 
-        // 3. Thống kê và Báo cáo
+        // 2b. Thống kê - Top bar
         btnStatistics.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
             startActivity(intent);
         });
 
-        // 4. Chia sẻ lịch/sự kiện
+        // 3. Chia sẻ
         btnShare.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ShareEventActivity.class);
             startActivity(intent);
         });
 
-        // 5. Tạo mẫu sự kiện (Event Templates)
+        // 4. Mẫu sự kiện - Card
+        btnTemplatesCard.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, EventTemplateDetailActivity.class);
+            startActivity(intent);
+        });
+
+        // 4b. Mẫu sự kiện - Top bar
         btnTemplates.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, EventTemplateDetailActivity.class);
             startActivity(intent);
         });
 
-        // 6. Nhắc nhở thông minh
+        // 5. Nhắc nhở thông minh
         btnReminder.setOnClickListener(v -> {
             showSmartReminder();
+        });
+
+        // 6. FAB - Thêm sự kiện
+        fabAddEvent.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddEventActivity.class);
+            startActivity(intent);
+        });
+
+        // 7. Settings
+        btnSettings.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Cài đặt đang được phát triển", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void showSmartReminder() {
-        String reminderMessage = "Bạn có 3 sự kiện sắp diễn ra trong ngày mai:\n\n" +
+        String reminderMessage = "🔔 Nhắc nhở thông minh\n\n" +
+                "Bạn có 3 sự kiện sắp diễn ra trong ngày mai:\n\n" +
                 "• 08:00 - Họp team Marketing\n" +
                 "• 14:00 - Gặp khách hàng\n" +
-                "• 18:00 - Thể dục";
+                "• 18:00 - Tập thể dục\n\n" +
+                "Đừng quên chuẩn bị!";
 
         SmartReminderDialog dialog = new SmartReminderDialog(
                 this,
                 reminderMessage,
                 () -> {
-                    // Callback khi người dùng nhấn "Đã hiểu"
+                    Toast.makeText(MainActivity.this, "Đã hiểu!", Toast.LENGTH_SHORT).show();
                 }
         );
         dialog.show();
