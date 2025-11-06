@@ -15,7 +15,7 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
     private EditText edtTitle, edtDescription;
     private TextView btnStartDate, btnStartTime, btnEndDate, btnEndTime, btnRepeat, btnColor, tagWork;
     private CheckBox cbHigh, cbMedium, cbLow;
-    private Button btnCancel, btnSave, btnUseTemplate;;
+    private TextView btnCancel, btnSave, btnUseTemplate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
