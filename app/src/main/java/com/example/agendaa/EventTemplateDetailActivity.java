@@ -15,7 +15,7 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
     private EditText edtTitle, edtDescription;
     private TextView btnStartDate, btnStartTime, btnEndDate, btnEndTime, btnRepeat, btnColor, tagWork;
     private CheckBox cbHigh, cbMedium, cbLow;
-    private Button btnCancel, btnSave, btnUseTemplate;;
+    private TextView btnCancel, btnSave, btnUseTemplate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,22 @@ public class EventTemplateDetailActivity extends AppCompatActivity {
         builder.setTitle("Chọn màu")
                 .setItems(items, (dialog, which) -> {
                     btnColor.setText(items[which]);
-                    // TODO: Đổi background màu của btnColor theo lựa chọn
+
+                    // Đổi background màu của btnColor theo lựa chọn
+                    switch (which) {
+                        case 0: // Màu mặc định
+                            btnColor.setBackgroundResource(R.drawable.bg_tag_rounded_blue);
+                            break;
+                        case 1: // Màu đỏ cà chua
+                            btnColor.setBackgroundResource(R.drawable.bg_tag_rounded_red);
+                            break;
+                        case 2: // Màu xanh
+                            btnColor.setBackgroundResource(R.drawable.bg_tag_rounded_green);
+                            break;
+                        case 3: // Màu vàng
+                            btnColor.setBackgroundResource(R.drawable.bg_tag_rounded_yellow);
+                            break;
+                    }
                 });
         builder.show();
     }

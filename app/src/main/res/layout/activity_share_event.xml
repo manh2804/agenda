@@ -81,7 +81,6 @@
                     android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_people_sharing"
                     app:tint="#666666" />
 
             </LinearLayout>
